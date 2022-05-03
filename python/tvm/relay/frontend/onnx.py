@@ -1806,6 +1806,7 @@ class Split(OnnxOpConverter):
         splits_rank = None
         if splits is not None:
             splits_rank = len(infer_shape(splits))
+        breakpoint()
         if splits is not None and splits_rank > 0:
             if isinstance(splits, _expr.Constant):
                 splits = splits.data.asnumpy()
