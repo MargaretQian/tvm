@@ -905,7 +905,7 @@ def collapse_sum_to(data, shape):
     return _make.collapse_sum_to(data, shape)
 
 
-def split(data, indices_or_sections, axis=0):
+def split(data, indices_or_sections, splits, axis=0):
     """Split input tensor along axis by sections or indices.
 
     If indices_or_sections is an integer, the input will be divided equally
@@ -930,6 +930,10 @@ def split(data, indices_or_sections, axis=0):
     ret : relay.Tuple([relay.Expr, relay.Expr])
         The computed result.
     """
+    if isinstance(indices_or_sections, Expr):
+        breakpoint()
+        return _dyn_make.split(data, indices_or_sections, axis)
+    
     if isinstance(indices_or_sections, int):
         ret_size = indices_or_sections
     else:

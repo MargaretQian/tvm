@@ -1816,7 +1816,10 @@ class Split(OnnxOpConverter):
                     index += i
                     indices.append(index)
             else:
-                raise ValueError("Dynamic Split not yet supported")
+                # need to get indices dynamically?
+                indices = splits # maybe?
+                # splits is an array here with values for length of splits, sum should equal total length
+                # raise ValueError("Dynamic Split not yet supported")
         # When splits isnt specified divide evenly over axis.
         else:
             indices = attr["tvm_custom"]["num_outputs"]

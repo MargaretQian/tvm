@@ -752,6 +752,30 @@ RELAY_REGISTER_OP("dyn.squeeze")
     .set_attr<TOpPattern>("TOpPattern", kInjective)
     .set_attr<TReshapeOp>("TReshapeOp", true);
 
+
+Expr MakeDynSplit(Expr data, Expr axes) {
+  auto attrs = make_object<SplitAttrs>();
+  static const Op& op = Op::Get("dyn.split");
+  return Call(op, {data, axes}, Attrs(attrs), {});
+}
+
+TVM_REGISTER_GLOBAL("relay.op.dyn._make.split").set_body_typed(MakeDynSqueeze);
+
+RELAY_REGISTER_OP("dyn.split")
+    .describe(R"code(Insert one new axis at the position given by `axis`
+
+- **data**: The input data to the operator.
+- **axis**: The axis to insert a new dimension
+
+)code" TVM_ADD_FILELINE)
+    .set_num_inputs(2)
+    .add_argument("data", "Tensor", "The input tensor.")
+    .add_argument("axis", "Tensor", "The axis to insert at a dimension.")
+    .set_support_level(3)
+    .add_type_rel("DynamicSplit", ExpandDimsRel)
+    .set_attr<FTVMCompute>("FTVMCompute", ExpandDimsCompute)
+    .set_attr<TOpPattern>("TOpPattern", kInjective);
+
 }  // namespace dyn
 }  // namespace relay
 }  // namespace tvm

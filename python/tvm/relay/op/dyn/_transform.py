@@ -32,6 +32,7 @@ _reg.register_injective_schedule("dyn.one_hot")
 _reg.register_injective_schedule("dyn.full")
 _reg.register_injective_schedule("dyn.strided_slice")
 _reg.register_injective_schedule("dyn.sparse_to_dense")
+_reg.register_injective_schedule("dyn.split")
 
 
 @script
@@ -127,6 +128,10 @@ def dynamic_expand_dims_shape_func(attrs, inputs, out_ndims):
         )
     ]
 
+
+@_reg.register_shape_func("dyn.split", [True, True])
+def dynamic_expand_dims_shape_func(attrs, inputs, _):
+    breakpoint()
 
 @script
 def _tile_shape_func(data, reps, ndim, tndim, rndim):
